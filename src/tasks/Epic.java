@@ -1,5 +1,7 @@
 package tasks;
 
+import status.Status;
+
 import java.util.ArrayList;
 
 public class Epic extends Task {

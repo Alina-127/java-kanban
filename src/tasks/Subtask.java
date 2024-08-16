@@ -1,5 +1,7 @@
 package tasks;
 
+import status.Status;
+
 public class Subtask extends Task {
     private int subId;
 
@@ -12,6 +14,9 @@ public class Subtask extends Task {
     public Subtask(String name, String description, Status status, int subId) {
         super(name, description, status);
         this.subId = subId;
+    }
+    public Subtask(int id, String name, String description, Status status) {
+        super(id, name, description, status);
     }
 
 
