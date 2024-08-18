@@ -5,15 +5,13 @@ import status.Status;
 import tasks.Subtask;
 import tasks.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 
 public class InMemoryTaskManager implements TaskManager {
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private final Map<Integer, Task> tasks = new HashMap<>();
+    private final Map<Integer, Epic> epics = new HashMap<>();
+    private final Map<Integer, Subtask> subtasks = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
     static int id = 1;
 
@@ -204,13 +202,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     // трансфер для передачи подзадачи в эпик, чтобы в дальнейшем проверить статус
-    public void transferSubIntoEpic(Subtask newSubtask) {
+    private void transferSubIntoEpic(Subtask newSubtask) {
         Epic epic = epics.get(newSubtask.getSubId());
         updateEpicStatus(epic);
     }
 
     // проверка и изменение сатуса эпик
-    public void updateEpicStatus(Epic epic) {
+    private void updateEpicStatus(Epic epic) {
         int numberOfNew = 0;
         int numberOfDone = 0;
         ArrayList<Subtask> newSubList = epic.getSubtasks();
