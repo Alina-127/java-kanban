@@ -10,19 +10,22 @@ import tasks.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryHistoryManagerTest {
-    public TaskManager taskManager;
+    //public TaskManager taskManager;
+    HistoryManager historyManager;
+    Task task1 = new Task(1, "Переезд", "в 2 часа", Status.NEW);
+    Task task2 = new Task(2, "Концерт", "в 2 часа", Status.NEW);
+    Task task3 = new Task(3, "Концерт", "в 4 часа", Status.NEW);
     @BeforeEach
     public void beforeEach() {
-        taskManager = Managers.getDefault();
+        //taskManager = Managers.getDefault();
+        historyManager = Managers.getDefaultHistory();
     }
 
     @Test
     public void addHistory() {
-        HistoryManager historyManager = Managers.getDefaultHistory();
         historyManager.add(new Task("Переезд", "в 2 часа", Status.NEW));
         final List<Task> history = historyManager.getHistory();
         assertNotNull(history, "История не пустая.");
@@ -30,77 +33,75 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void addListOf10Tasks(){
-        for(int i = 0; i < 15; i++){
-            taskManager.addNewTask(new Task("Переезд", "в 2 часа", Status.NEW));
-        }
-        List<Task> tasks = taskManager.getTasks();
-        for (Task task : tasks) {
-            taskManager.getTaskByID(task.getId());
-        }
-
-        List<Task> historyTasks = taskManager.getHistory();
-        assertEquals(10, historyTasks.size(), "Неверное количество элементов в истории ");
+    public void addTasks() {
+        HistoryManager historyManager = Managers.getDefaultHistory();
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks.add(task1);
+        tasks.add(task2);
+        historyManager.add(task1);
+        historyManager.add(task2);
+        assertEquals(tasks, historyManager.getHistory(), "Неверное количество элементов в истории ");
     }
 
     @Test
-    public void getHistoryOldTaskAfterUpdate(){
-        Task task1 = new Task("Переезд", "в 2 часа", Status.NEW);
-        taskManager.addNewTask(task1);
-        taskManager.getTaskByID(task1.getId());
-        final List<Task> tasks = new ArrayList<>();
-        tasks.add(taskManager.getTaskByID(task1.getId()));
-        Task task2 = new Task(task1.getId(),"Прогулка", "в 4 часа", Status.DONE);
-        taskManager.updateTask(task2);
-        taskManager.getTaskByID(task2.getId());
-        final List<Task> historyTasks = taskManager.getHistory();
-        Task oldTaskHistory = historyTasks.getFirst();
-        Task oldTask = tasks.getFirst();
-        assertEquals(oldTask.getId(), oldTaskHistory.getId(), "Задачи по id не совпадают");
-        assertEquals(oldTask.getName(), oldTaskHistory.getName(), "Задачи по name не совпадают");
-        assertEquals(oldTask.getDescription(), oldTaskHistory.getDescription(), "Задачи по description не совпадают");
-        assertEquals(oldTask.getStatus(), oldTaskHistory.getStatus(), "Задачи по status не совпадают");
+    public void addTaskNull() {
+        HistoryManager historyManager = Managers.getDefaultHistory();
+        historyManager.add(null);
+        assertTrue(historyManager.getHistory().isEmpty(), "Неверное добавление элементов в историю");
     }
 
     @Test
-    public void getHistoryOldEpicAfterUpdate(){
-        Epic epic1 = new Epic("Приготовить ужин", "Купить продукты");
-        taskManager.addNewEpic(epic1);
-        taskManager.getEpicByID(epic1.getId());
-        final List<Task> epics = new ArrayList<>();
-        epics.add(taskManager.getEpicByID(epic1.getId()));
-        Epic epic2 = new Epic(epic1.getId(),"Прогулка", "в 4 часа");
-        taskManager.updateEpic(epic2);
-        taskManager.getEpicByID(epic2.getId());
-        final List<Task> historyEpics = taskManager.getHistory();
-        Task oldEpicHistory = historyEpics.getFirst();
-        Task oldEpic = epics.getFirst();
-        assertEquals(oldEpic.getId(), oldEpicHistory.getId(), "Задачи по id не совпадают");
-        assertEquals(oldEpic.getName(), oldEpicHistory.getName(), "Задачи по name не совпадают");
-        assertEquals(oldEpic.getDescription(), oldEpicHistory.getDescription(), "Задачи по description не совпадают");
-        assertEquals(oldEpic.getStatus(), oldEpicHistory.getStatus(), "Задачи по status не совпадают");
+    public void removeIfOne(){
+        historyManager.add(task1);
+        historyManager.remove(1);
+        assertTrue(historyManager.getHistory().isEmpty(), "Неверное удаление элементов по id");
     }
 
     @Test
-    public void getHistoryOldSubtaskAfterUpdate(){
-        Epic epic1 = new Epic("Приготовить ужин", "Купить продукты");
-        taskManager.addNewEpic(epic1);
-        Subtask subtask1 = new Subtask("Приготовить крылышки", "Купить мёд и соевый соус", Status.IN_PROGRESS,
-                epic1.getId());
-        taskManager.addNewSubtask(subtask1);
-        taskManager.getSubtaskByID(subtask1.getId());
-        final List<Task> subtasks = new ArrayList<>();
-        subtasks.add(taskManager.getSubtaskByID(subtask1.getId()));
-        Subtask subtask2 = new Subtask(subtask1.getId(),"Прогулка", "в 4 часа", Status.NEW,
-                epic1.getId() );
-        taskManager.updateSubtask(subtask2);
-        taskManager.getSubtaskByID(subtask2.getId());
-        final List<Task> historySubtasks = taskManager.getHistory();
-        Task oldSubtaskHistory = historySubtasks.getFirst();
-        Task oldSubtask = subtasks.getFirst();
-        assertEquals(oldSubtask.getId(), oldSubtaskHistory.getId(), "Задачи по id не совпадают");
-        assertEquals(oldSubtask.getName(), oldSubtaskHistory.getName(), "Задачи по name не совпадают");
-        assertEquals(oldSubtask.getDescription(), oldSubtaskHistory.getDescription(), "Задачи по description не совпадают");
-        assertEquals(oldSubtask.getStatus(), oldSubtaskHistory.getStatus(), "Задачи по status не совпадают");
+    public void removeIfHead(){
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks.add(task2);
+        tasks.add(task3);
+        historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.add(task3);
+        historyManager.remove(1);
+        assertEquals(tasks, historyManager.getHistory(),"Неверное удаление элементов по id head");
+
+    }
+
+    @Test
+    public void removeIfTail(){
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks.add(task1);
+        tasks.add(task2);
+        historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.add(task3);
+        historyManager.remove(3);
+        assertEquals(tasks, historyManager.getHistory(),"Неверное удаление элементов по id tail");
+
+    }
+
+    @Test
+    public void remove(){
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks.add(task1);
+        tasks.add(task3);
+        historyManager.add(task1);
+        historyManager.add(task2);
+        historyManager.add(task3);
+        historyManager.remove(2);
+        assertEquals(tasks, historyManager.getHistory(),"Неверное удаление элементов по id в середине");
+
+    }
+
+    @Test
+    public void aadTheSameTask(){
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks.add(task1);
+        historyManager.add(task1);
+        historyManager.add(task1);
+        assertEquals(tasks, historyManager.getHistory(),"Неверное добавление одинаковых элементов");
     }
 }

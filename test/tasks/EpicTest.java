@@ -3,6 +3,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import status.Status;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 public class EpicTest {
     @Test //проверьте, что наследники класса Task равны друг другу, если равен их id;
@@ -13,5 +16,9 @@ public class EpicTest {
         Assertions.assertEquals(epic2, epic1,
                 "Ошибка, экземпляры класса Subtask равны друг другу, если равен их id;");
     }
-
+    @Test
+    public void toStringEpic(){
+        Epic epic = new Epic("Приготовить ужин", "Купить продукты");
+        assertNotNull(epic.toString(), "Вывод не совпадает");
+    }
 }

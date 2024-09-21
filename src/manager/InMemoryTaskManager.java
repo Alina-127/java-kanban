@@ -172,6 +172,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task deleteTaskById(Integer id) {
         Task task = tasks.get(id);
         tasks.remove(id);
+        historyManager.remove(id);
         return task;// возвращаем значение, чтобы спросить у пользователя действительно ли он хочет это удалить.
     }
 
@@ -179,6 +180,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic deleteEpicById(Integer id) {
         Epic epic = epics.get(id);
         epics.remove(id);
+        historyManager.remove(id);
         for (Subtask subtask : epic.getSubtasks()) {
             subtasks.remove(subtask.getId());
         }
@@ -191,6 +193,7 @@ public class InMemoryTaskManager implements TaskManager {
         Subtask subtask = subtasks.get(id);
         Epic epic = epics.get(subtask.getSubId());
         subtasks.remove(id);
+        historyManager.remove(id);
         epic.removeSubtasks(subtask);
         updateEpicStatus(epic);
         return subtask; // возвращаем значение, чтобы спросить у пользователя действительно ли он хочет это удалить.
