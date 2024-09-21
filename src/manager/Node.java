@@ -2,12 +2,12 @@ package manager;
 
 import tasks.Task;
 
-public class Node <T> {
-    Node <T> previous;
-    Node <T> next;
+public class Node<T> {
+    Node<T> previous;
+    Node<T> next;
     Task values;
 
-    public Node(Node <T> previous, Task values, Node <T> next) {
+    public Node(Node<T> previous, Task values, Node<T> next) {
             this.values = values;
             this.next = next;
             this.previous = previous;
