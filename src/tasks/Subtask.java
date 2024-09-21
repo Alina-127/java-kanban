@@ -15,6 +15,7 @@ public class Subtask extends Task {
         super(name, description, status);
         this.subId = subId;
     }
+
     public Subtask(int id, String name, String description, Status status) {
         super(id, name, description, status);
     }
