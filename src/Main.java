@@ -45,34 +45,5 @@ public class Main {
         taskManager.deleteEpicById(epic.getId());
         System.out.println("История:");
         System.out.println(taskManager.getHistory());
-        printAllTasks(taskManager);
-
-
-
-
-    }
-        
-    private static void printAllTasks(InMemoryTaskManager taskManager) {
-        System.out.println("Задачи:");
-        for (Task tasks : taskManager.getTasks()) {
-            System.out.println(tasks);
-        }
-        System.out.println("Эпики:");
-        for (Epic epics : taskManager.getEpics()) {
-            System.out.println(epics);
-
-            for (Subtask subtasks : taskManager.getEpicSubtasks(epics)) {
-                System.out.println("--> " + subtasks);
-            }
-        }
-        System.out.println("Подзадачи:");
-        for (Subtask subtasks : taskManager.getSubtasks()) {
-            System.out.println(subtasks);
-        }
-
-        System.out.println("История:");
-        for (Task tasks : taskManager.getHistory()) {
-            System.out.println(tasks);
-        }
     }
 }
