@@ -51,6 +51,7 @@ public class Main {
 
 
         }
+        
     private static void printAllTasks(InMemoryTaskManager taskManager) {
         System.out.println("Задачи:");
         for (Task tasks : taskManager.getTasks()) {
