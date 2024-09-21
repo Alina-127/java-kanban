@@ -14,11 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class InMemoryTaskManagerTest {
     public TaskManager taskManager;
     @BeforeEach
-    public void beforeEach(){
+    public void beforeEach() {
         taskManager = Managers.getDefault();
     }
-    @Test //проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id
-    public void addNewTaskAndGetById(){
+    @Test
+    public void addNewTaskAndGetById() {
         Task task = new Task("Переезд", "в 2 часа", Status.NEW);
         final int taskId = taskManager.addNewTask(task).getId();
 
@@ -35,8 +35,8 @@ public class InMemoryTaskManagerTest {
 
     }
 
-    @Test //проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id
-    public void addNewEpicAndGetById(){
+    @Test
+    public void addNewEpicAndGetById() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
 
         final int epicId = taskManager.addNewEpic(epic).getId();
@@ -53,8 +53,8 @@ public class InMemoryTaskManagerTest {
         assertEquals(epic, epics.getFirst(), "Задачи не совпадают.");
     }
 
-    @Test //проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id
-    public void addNewSubtaskAndGetById(){
+    @Test
+    public void addNewSubtaskAndGetById() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
         Subtask subtask = new Subtask("Купить овощи", "Огурцы, картошка", Status.IN_PROGRESS,
@@ -74,7 +74,7 @@ public class InMemoryTaskManagerTest {
         assertEquals(subtask, subtasks.getFirst(), "Задачи не совпадают.");
     }
     @Test
-    public void updateTaskShouldReturnTaskId(){
+    public void updateTaskShouldReturnTaskId() {
         Task task = new Task("Переезд", "в 2 часа", Status.NEW);
         taskManager.addNewTask(task);
         Task task2 = new Task(task.getId(),"Прогулка", "в 4 часа", Status.DONE);
@@ -83,7 +83,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void updateTaskIfNull(){
+    public void updateTaskIfNull() {
         Task task = new Task(1, "Переезд", "в 2 часа", Status.NEW);
         taskManager.addNewTask(task);
         Task task2 = new Task(2,"Прогулка", "в 4 часа", Status.DONE);
@@ -91,7 +91,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void updateEpicShouldReturnEpicId(){
+    public void updateEpicShouldReturnEpicId() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
         Epic epic2 = new Epic(epic.getId(),"Переезд", "в 2 часа");
@@ -100,7 +100,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void updateEpicWithSubtask(){
+    public void updateEpicWithSubtask() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
         Subtask subtask = new Subtask("Купить овощи", "Огурцы, картошка", Status.IN_PROGRESS,
@@ -114,14 +114,14 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void updateEpicIfNull(){
+    public void updateEpicIfNull() {
         Epic epic = new Epic(1,"Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
         Epic epic2 = new Epic(2,"Переезд", "в 2 часа");
         assertNull(taskManager.updateEpic(epic2), "Задачи не совпадают.");
     }
     @Test
-    public void updateSubtaskShouldReturnSubtaskId(){
+    public void updateSubtaskShouldReturnSubtaskId() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
         Subtask subtask = new Subtask("Купить овощи", "Огурцы, картошка", Status.IN_PROGRESS,
@@ -132,7 +132,7 @@ public class InMemoryTaskManagerTest {
         assertEquals(subtask, subtask2, "Задачи не совпадают.");
     }
     @Test
-    public void updateSubtaskIfNull(){
+    public void updateSubtaskIfNull() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
         Subtask subtask = new Subtask(1,"Купить овощи", "Огурцы, картошка", Status.IN_PROGRESS,
@@ -143,7 +143,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void deleteByIdTask(){
+    public void deleteByIdTask() {
         Task task = new Task("Переезд", "в 2 часа", Status.NEW);
         taskManager.addNewTask(task);
         Task task2 = new Task("Прогулка", "в 4 часа", Status.DONE);
@@ -154,7 +154,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void deleteByIdEpic(){
+    public void deleteByIdEpic() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
         Subtask subtask = new Subtask("Купить овощи", "Огурцы, картошка", Status.IN_PROGRESS,
@@ -168,7 +168,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void deleteByIdSubtask(){
+    public void deleteByIdSubtask() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
         Subtask subtask = new Subtask("Купить овощи", "Огурцы, картошка", Status.IN_PROGRESS,
@@ -182,7 +182,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void deleteAllTasks(){
+    public void deleteAllTasks() {
         Task task = new Task("Переезд", "в 2 часа", Status.NEW);
         taskManager.addNewTask(task);
         Task task2 = new Task("Прогулка", "в 4 часа", Status.DONE);
@@ -193,7 +193,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void deleteAllEpics(){
+    public void deleteAllEpics() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
         Epic epic2 = new Epic("Прогулка", "в 4 часа");
@@ -204,7 +204,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void deleteAllSubtasks(){
+    public void deleteAllSubtasks() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
         Subtask subtask = new Subtask("Купить овощи", "Огурцы, картошка", Status.IN_PROGRESS,
@@ -218,7 +218,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void createdTasks(){
+    public void createdTasks() {
         Task task = new Task("Переезд", "в 2 часа", Status.NEW);
         taskManager.addNewTask(task);
         final List<Task> tasks = taskManager.getTasks();
@@ -230,7 +230,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void historyTaskOne(){
+    public void historyTaskOne() {
         Task task = new Task("Переезд", "в 2 часа", Status.NEW);
         taskManager.addNewTask(task);
         final ArrayList<Task> tasks = new ArrayList<>();
@@ -239,7 +239,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void historyTaskHead(){
+    public void historyTaskHead() {
         Task task = new Task("Переезд", "в 2 часа", Status.NEW);
         taskManager.addNewTask(task);
         Task task2 = new Task( "Концерт", "в 2 часа", Status.NEW);
@@ -255,7 +255,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void historyTask(){
+    public void historyTask() {
         Task task = new Task("Переезд", "в 2 часа", Status.NEW);
         taskManager.addNewTask(task);
         Task task2 = new Task( "Концерт", "в 2 часа", Status.NEW);
@@ -273,7 +273,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void getEpicTheSameSubtasks(){
+    public void getEpicTheSameSubtasks() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
         Subtask subtask = new Subtask("Купить овощи", "Огурцы, картошка", Status.IN_PROGRESS,
@@ -289,7 +289,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void toStringTaskManager(){
+    public void toStringTaskManager() {
         Task task = new Task("Переезд", "в 2 часа", Status.NEW);
         taskManager.addNewTask(task);
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
@@ -299,4 +299,4 @@ public class InMemoryTaskManagerTest {
         taskManager.addNewSubtask(subtask);
         assertNotNull(taskManager.toString(), "Вывод не совпадает");
     }
-    }
+}
