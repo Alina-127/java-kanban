@@ -15,7 +15,7 @@ public class SubtaskTest {
     }
 
     @Test
-    public void toStringEpic() {
+    public void toStringSubtask_shouldReturnSubtaskComponentsInString() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         Subtask subtask = new Subtask("Купить овощи", "Огурцы, картошка", Status.IN_PROGRESS,
                 epic.getId());

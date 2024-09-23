@@ -16,7 +16,7 @@ public class TaskTest {
     }
 
     @Test
-    public void toStringEpic() {
+    public void toStringTask_shouldReturnTaskComponentsInString() {
         Task task = new Task("Переезд", "в 2 часа", Status.NEW);
         assertNotNull(task.toString(), "Вывод не совпадает");
     }

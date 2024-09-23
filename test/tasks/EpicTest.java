@@ -15,7 +15,7 @@ public class EpicTest {
     }
 
     @Test
-    public void toStringEpic() {
+    public void toStringEpic_shouldReturnEpicComponentsInString() {
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         assertNotNull(epic.toString(), "Вывод не совпадает");
     }

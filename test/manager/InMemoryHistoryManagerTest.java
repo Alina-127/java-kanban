@@ -22,7 +22,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void addHistory() {
+    public void addHistory_shouldNotBeAnEmptyHistory() {
         historyManager.add(new Task("Переезд", "в 2 часа", Status.NEW));
         final List<Task> history = historyManager.getHistory();
         assertNotNull(history, "История не пустая.");
@@ -30,7 +30,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void addTasks() {
+    public void addTasks_shouldAddTasksToHistory() {
         HistoryManager historyManager = Managers.getDefaultHistory();
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(task1);
@@ -41,21 +41,21 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void addTaskNull() {
+    public void addTask_shouldReturnNullIfTaskIsEmpty() {
         HistoryManager historyManager = Managers.getDefaultHistory();
         historyManager.add(null);
         assertTrue(historyManager.getHistory().isEmpty(), "Неверное добавление элементов в историю");
     }
 
     @Test
-    public void removeIfOne() {
+    public void remove_ifOneTask_shouldReturnNull() {
         historyManager.add(task1);
         historyManager.remove(1);
         assertTrue(historyManager.getHistory().isEmpty(), "Неверное удаление элементов по id");
     }
 
     @Test
-    public void removeIfHead() {
+    public void remove_ifTaskIsHead_shouldReturnNull() {
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(task2);
         tasks.add(task3);
@@ -68,7 +68,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void removeIfTail() {
+    public void remove_ifTaskIsTail_shouldReturnNull() {
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(task1);
         tasks.add(task2);
@@ -81,7 +81,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void remove() {
+    public void remove_inTheMiddle_shouldReturnNull() {
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(task1);
         tasks.add(task3);
@@ -94,7 +94,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void aadTheSameTask() {
+    public void add_TheSameTask_shouldEquals() {
         ArrayList<Task> tasks = new ArrayList<>();
         tasks.add(task1);
         historyManager.add(task1);
