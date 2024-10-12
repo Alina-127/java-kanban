@@ -1,8 +1,10 @@
 package tasks;
 
+import status.TypesOfTasks;
+
 import java.util.ArrayList;
 
-public class Epic extends Task {
+public class Epic extends AbstractTask {
     private ArrayList<Subtask> subtasks = new ArrayList<>();
 
     public Epic(String name, String description) {
@@ -35,11 +37,17 @@ public class Epic extends Task {
     }
 
     @Override
+    public TypesOfTasks getType() {
+        return TypesOfTasks.EPIC;
+    }
+
+
+    @Override
     public String toString() {
         return "Epic{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", id=" + id +
                 ", status=" + status +
                 ", subtasksList=" + subtasks +
                 '}';

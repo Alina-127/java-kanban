@@ -1,49 +1,38 @@
+import manager.FileBackedTaskManager;
 import manager.InMemoryTaskManager;
+import manager.Managers;
+import manager.TaskManager;
 import status.Status;
 import tasks.*;
 
+import java.io.File;
+import java.io.IOException;
+
 public class Main {
 
-    public static void main(String[] args) {
-        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+    public static void main(String[] args){
+            FileBackedTaskManager taskManager = Managers.getDefaultTaskManager();
 
-        Task task = new Task("Переезд", "в 2 часа", Status.NEW);
-        taskManager.addNewTask(task);
+            Task task = new Task("Переезд", "в 2 часа", Status.NEW);
+            taskManager.addNewTask(task);
 
-        Task task2 = new Task("Покупки", "Открылся новый магазин", Status.IN_PROGRESS);
-        taskManager.addNewTask(task2);
+            Task task2 = new Task("Покупки", "Открылся новый магазин", Status.NEW);
+            taskManager.addNewTask(task2);
 
-        Epic epic = new Epic("Приготовить ужин", "Купить продукты");
-        taskManager.addNewEpic(epic);
+            Epic epic = new Epic("Приготовить ужин", "Купить продукты");
+            taskManager.addNewEpic(epic);
 
-        Subtask subtask = new Subtask("Купить овощи", "Огурцы, картошка", Status.IN_PROGRESS,
-                epic.getId());
-        taskManager.addNewSubtask(subtask);
+            Subtask subtask = new Subtask("Купить овощи", "Огурцы", Status.IN_PROGRESS,
+                    epic.getId());
+            taskManager.addNewSubtask(subtask);
 
-        Subtask subtask2 = new Subtask("Купить мясо", "Филе куриное", Status.DONE, epic.getId());
-        taskManager.addNewSubtask(subtask2);
+            Subtask subtask2 = new Subtask("Купить мясо", "Филе куриное", Status.NEW, epic.getId());
+            taskManager.addNewSubtask(subtask2);
 
-        Subtask subtask3 = new Subtask("Список дел", "накормить кота", Status.DONE, epic.getId());
-        taskManager.addNewSubtask(subtask3);
+            FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(Managers.file);
 
-        Epic epic2 = new Epic("Поиграть в компьютер", "Сначала выполнить дела");
-        taskManager.addNewEpic(epic2);
-
-        taskManager.getTaskByID(task.getId());
-        taskManager.getTaskByID(task.getId());
-        taskManager.getTaskByID(task2.getId());
-        System.out.println("История:");
-        System.out.println(taskManager.getHistory());
-        taskManager.getEpicByID(epic.getId());
-        taskManager.getEpicByID(epic2.getId());
-        taskManager.getEpicByID(epic2.getId());
-        System.out.println("История:");
-        System.out.println(taskManager.getHistory());
-        taskManager.deleteTaskById(task2.getId());
-        System.out.println("История:");
-        System.out.println(taskManager.getHistory());
-        taskManager.deleteEpicById(epic.getId());
-        System.out.println("История:");
-        System.out.println(taskManager.getHistory());
+            System.out.println("Tasks: " + loadedManager.getTasks());
+            System.out.println("Epics: " + loadedManager.getEpics());
+            System.out.println("Subtasks: " + loadedManager.getSubtasks());
     }
 }
