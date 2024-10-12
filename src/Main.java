@@ -4,7 +4,7 @@ import status.Status;
 import tasks.*;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
             FileBackedTaskManager taskManager = Managers.getDefaultTaskManager();
 
             Task task = new Task("Переезд", "в 2 часа", Status.NEW);

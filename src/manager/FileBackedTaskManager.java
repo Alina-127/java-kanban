@@ -13,7 +13,7 @@ import java.util.List;
 
 
 
-public class FileBackedTaskManager extends InMemoryTaskManager{
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
 
     public FileBackedTaskManager(File file) {
@@ -49,67 +49,67 @@ public class FileBackedTaskManager extends InMemoryTaskManager{
     }
 
     @Override
-    public Epic updateEpic(Epic updateEpic){
+    public Epic updateEpic(Epic updateEpic) {
         Epic epic = super.updateEpic(updateEpic);
         save();
         return epic;
     }
 
     @Override
-    public Subtask updateSubtask(Subtask updateSubtask){
+    public Subtask updateSubtask(Subtask updateSubtask) {
         Subtask subtask = super.updateSubtask(updateSubtask);
         save();
         return subtask;
     }
 
     @Override
-    public Task deleteTaskById(Integer id){
+    public Task deleteTaskById(Integer id) {
         super.deleteTaskById(id);
         save();
         return getTaskByID(id);
     }
 
     @Override
-    public Epic deleteEpicById(Integer id){
+    public Epic deleteEpicById(Integer id) {
         super.deleteEpicById(id);
         save();
         return getEpicByID(id);
     }
 
     @Override
-    public Subtask deleteSubtaskById(Integer id){
+    public Subtask deleteSubtaskById(Integer id) {
         super.deleteSubtaskById(id);
         save();
         return getSubtaskByID(id);
     }
 
     @Override
-    public void deleteTasks(){
+    public void deleteTasks() {
         super.deleteTasks();
         save();
     }
 
     @Override
-    public void deleteEpics(){
+    public void deleteEpics() {
         super.deleteEpics();
         save();
     }
 
     @Override
-    public void deleteSubtasks(){
+    public void deleteSubtasks() {
         super.deleteSubtasks();
         save();
     }
 
-    public void save(){
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
+    public void save() {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             List<Task> tasks = getTasks();
             List<Epic> epics = getEpics();
             List<Subtask> subtasks = getSubtasks();
             bw.write("id,type,name,description,status,epic");
             bw.newLine();
 
-            for(Task task: tasks){
+            for (Task task: tasks) {
                 bw.write(taskToString(task));
             }
             for(Epic epic: epics){
@@ -120,19 +120,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager{
             }
             bw.flush();
             bw.close();
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static FileBackedTaskManager loadFromFile(File file){
+    public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager taskManager = new FileBackedTaskManager(file);
-        try{
+        try {
             List<String> lines = Files.readAllLines(file.toPath());
             boolean isFirstLine = true;
             for (String line : lines) {
                 String[] content = line.split("\n");
-                for (String lin : content){
+                for (String lin : content) {
                     if (isFirstLine) {
                         isFirstLine = false;
                         continue;
@@ -167,9 +167,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager{
         return taskManager;
     }
 
-    public static String taskToString(AbstractTask task){
+    public static String taskToString(AbstractTask task) {
         String taskToString = null;
-        if (TypesOfTasks.TASK == task.getType()){
+        if (TypesOfTasks.TASK == task.getType()) {
             taskToString = String.format("%d,%s,%s,%s,%s\n", task.getId(), task.getType(), task.getName(),
                     task.getDescription(), task.getStatus().toString());
         } else if (TypesOfTasks.EPIC == task.getType()) {
@@ -184,7 +184,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager{
         return taskToString;
     }
 
-    public File getFile(){
+    public File getFile() {
         return file;
     }
 }
