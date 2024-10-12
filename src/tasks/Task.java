@@ -3,7 +3,7 @@ package tasks;
 import status.Status;
 import status.TypesOfTasks;
 
-public class Task extends AbstractTask{
+public class Task extends AbstractTask {
     public Task(String name, String description, Status status) {
         super(name, description, status);
     }
