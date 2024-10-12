@@ -10,8 +10,8 @@ public class Main {
         Task task = new Task("Переезд", "в 2 часа", Status.NEW);
         taskManager.addNewTask(task);
 
-        Task newTask = new Task("Покупки", "Открылся новый магазин", Status.IN_PROGRESS);
-        taskManager.addNewTask(newTask);
+        Task task2 = new Task("Покупки", "Открылся новый магазин", Status.IN_PROGRESS);
+        taskManager.addNewTask(task2);
 
         Epic epic = new Epic("Приготовить ужин", "Купить продукты");
         taskManager.addNewEpic(epic);
@@ -20,62 +20,30 @@ public class Main {
                 epic.getId());
         taskManager.addNewSubtask(subtask);
 
-        Subtask newSubtask = new Subtask("Купить мясо", "Филе куриное", Status.DONE, epic.getId());
-        taskManager.addNewSubtask(newSubtask);
-
-        Epic newEpic = new Epic("Поиграть в компьютер", "Сначала выполнить дела");
-        taskManager.addNewEpic(newEpic);
-
-        Subtask subtask2 = new Subtask("Список дел", "накормить кота", Status.DONE, newEpic.getId());
+        Subtask subtask2 = new Subtask("Купить мясо", "Филе куриное", Status.DONE, epic.getId());
         taskManager.addNewSubtask(subtask2);
 
-        Task task2 = new Task(1, "Переезд", "в 2 часа", Status.DONE);
-        taskManager.updateTask(task2);
+        Subtask subtask3 = new Subtask("Список дел", "накормить кота", Status.DONE, epic.getId());
+        taskManager.addNewSubtask(subtask3);
 
-        Task newTask2 = new Task(2, "Покупки", "Открылся новый магазин", Status.DONE);
-        taskManager.updateTask(newTask2);
+        Epic epic2 = new Epic("Поиграть в компьютер", "Сначала выполнить дела");
+        taskManager.addNewEpic(epic2);
 
-        Subtask subtaskUpdate = new Subtask(4, "Купить овощи", "Огурцы, картошка",
-                Status.NEW, epic.getId());
-        taskManager.updateSubtask(subtaskUpdate);
-
-        Subtask newSubtaskUpdate = new Subtask(5, "Купить мясо", "Филе куриное", Status.NEW,
-                epic.getId());
-        taskManager.updateSubtask(newSubtaskUpdate);
-
-        Subtask subtask2Update = new Subtask(7, "Список дел", "накормить кота", Status.IN_PROGRESS,
-                newEpic.getId());
-        taskManager.updateSubtask(subtask2Update);
-        System.out.println(taskManager.getTaskByID(1));
-
-        taskManager.deleteTaskById(2);
-        taskManager.deleteEpicById(3);
-        printAllTasks(taskManager);
-//        System.out.println(taskManager.getTasks());
-//        System.out.println(taskManager.getEpics());
-//        System.out.println(taskManager.getSubtasks());
-        }
-    private static void printAllTasks(InMemoryTaskManager taskManager) {
-        System.out.println("Задачи:");
-        for (Task tasks : taskManager.getTasks()) {
-            System.out.println(tasks);
-        }
-        System.out.println("Эпики:");
-        for (Epic epics : taskManager.getEpics()) {
-            System.out.println(epics);
-
-            for (Subtask subtasks : taskManager.getEpicSubtasks(epics)) {
-                System.out.println("--> " + subtasks);
-            }
-        }
-        System.out.println("Подзадачи:");
-        for (Subtask subtasks : taskManager.getSubtasks()) {
-            System.out.println(subtasks);
-        }
-
+        taskManager.getTaskByID(task.getId());
+        taskManager.getTaskByID(task.getId());
+        taskManager.getTaskByID(task2.getId());
         System.out.println("История:");
-        for (Task tasks : taskManager.getHistory()) {
-            System.out.println(tasks);
-        }
+        System.out.println(taskManager.getHistory());
+        taskManager.getEpicByID(epic.getId());
+        taskManager.getEpicByID(epic2.getId());
+        taskManager.getEpicByID(epic2.getId());
+        System.out.println("История:");
+        System.out.println(taskManager.getHistory());
+        taskManager.deleteTaskById(task2.getId());
+        System.out.println("История:");
+        System.out.println(taskManager.getHistory());
+        taskManager.deleteEpicById(epic.getId());
+        System.out.println("История:");
+        System.out.println(taskManager.getHistory());
     }
 }
