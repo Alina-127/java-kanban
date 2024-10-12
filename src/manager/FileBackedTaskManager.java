@@ -42,7 +42,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public Task updateTask (Task updatedTask) {
+    public Task updateTask(Task updatedTask) {
         Task task = super.updateTask(updatedTask);
         save();
         return task;
@@ -112,10 +112,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             for (Task task: tasks) {
                 bw.write(taskToString(task));
             }
-            for(Epic epic: epics) {
+            for (Epic epic: epics) {
                 bw.write(taskToString(epic));
             }
-            for(Subtask subtask: subtasks) {
+            for (Subtask subtask: subtasks) {
                 bw.write(taskToString(subtask));
             }
             bw.flush();
