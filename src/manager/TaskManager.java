@@ -1,5 +1,6 @@
 package manager;
 
+import tasks.AbstractTask;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -46,5 +47,5 @@ public interface TaskManager {
 
     Subtask deleteSubtaskById(Integer id);
 
-    List<Task> getHistory();
+    List<AbstractTask> getHistory();
 }

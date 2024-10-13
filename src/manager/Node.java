@@ -1,13 +1,14 @@
 package manager;
 
+import tasks.AbstractTask;
 import tasks.Task;
 
 public class Node<T> {
     Node<T> previous;
     Node<T> next;
-    Task values;
+    AbstractTask values;
 
-    public Node(Node<T> previous, Task values, Node<T> next) {
+    public Node(Node<T> previous, AbstractTask values, Node<T> next) {
             this.values = values;
             this.next = next;
             this.previous = previous;
@@ -21,7 +22,7 @@ public class Node<T> {
         return next;
     }
 
-    public Task getValues() {
+    public AbstractTask getValues() {
         return values;
     }
 

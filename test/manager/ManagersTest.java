@@ -1,7 +1,7 @@
 package manager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import status.Status;
+
 public class ManagersTest {
    @Test
     public void getDefaultShouldInitializeInMemoryTaskManager() {

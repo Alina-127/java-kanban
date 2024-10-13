@@ -1,8 +1,9 @@
 package tasks;
 
 import status.Status;
+import status.TypesOfTasks;
 
-public class Subtask extends Task {
+public class Subtask extends AbstractTask {
     private int subId;
 
     public Subtask(int id, String name, String description, Status status, int subId) {
@@ -29,13 +30,19 @@ public class Subtask extends Task {
         this.subId = subId;
     }
 
+    @Override
+    public TypesOfTasks getType() {
+        return TypesOfTasks.SUBTASK;
+    }
+
+
 
     @Override
     public String toString() {
         return "Subtask{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", id=" + id +
                 ", status=" + status +
                 ", subId=" + subId +
                 '}';
