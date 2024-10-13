@@ -1,5 +1,6 @@
 package manager;
 
+import exception.ManagerSaveException;
 import status.Status;
 import status.TypesOfTasks;
 import tasks.AbstractTask;
@@ -101,7 +102,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    public void save() {
+    private void save() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             List<Task> tasks = getTasks();
             List<Epic> epics = getEpics();
@@ -119,9 +120,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 bw.write(taskToString(subtask));
             }
             bw.flush();
-            bw.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e.getMessage());
         }
     }
 
@@ -162,7 +162,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e.getMessage());
         }
         return taskManager;
     }
@@ -188,3 +188,4 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return file;
     }
 }
+
