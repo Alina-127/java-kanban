@@ -1,5 +1,6 @@
 package manager;
 
+import tasks.AbstractTask;
 import tasks.Epic;
 import status.Status;
 import tasks.Subtask;
@@ -9,11 +10,14 @@ import java.util.*;
 
 
 public class InMemoryTaskManager implements TaskManager {
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Epic> epics = new HashMap<>();
-    private final Map<Integer, Subtask> subtasks = new HashMap<>();
-    private final HistoryManager historyManager = Managers.getDefaultHistory();
+    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, Epic> epics = new HashMap<>();
+    protected final Map<Integer, Subtask> subtasks = new HashMap<>();
+    private HistoryManager historyManager = Managers.getDefaultHistory();
     static int id = 1;
+
+    public InMemoryTaskManager() {
+    }
 
     @Override
     public ArrayList<Task> getTasks() {
@@ -95,6 +99,8 @@ public class InMemoryTaskManager implements TaskManager {
         tasks.put(newTask.getId(), newTask);
         return newTask;
     }
+
+
 
     @Override
     public Epic addNewEpic(Epic newEpic) {
@@ -200,7 +206,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public ArrayList<AbstractTask> getHistory() {
         return historyManager.getHistory();
     }
 
@@ -211,7 +217,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     // проверка и изменение сатуса эпик
-    private void updateEpicStatus(Epic epic) {
+    protected void updateEpicStatus(Epic epic) {
         int numberOfNew = 0;
         int numberOfDone = 0;
         ArrayList<Subtask> newSubList = epic.getSubtasks();
@@ -236,6 +242,14 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    public static Status getStatus(String str) {
+        return switch (str) {
+            case "NEW" -> Status.NEW;
+            case "IN_PROGRESS" -> Status.IN_PROGRESS;
+            case "DONE" -> Status.DONE;
+            default -> null;
+        };
+    }
 
     @Override
     public String toString() {

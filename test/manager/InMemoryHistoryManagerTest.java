@@ -3,6 +3,7 @@ package manager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import status.Status;
+import tasks.AbstractTask;
 import tasks.Task;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class InMemoryHistoryManagerTest {
     @Test
     public void addHistory_shouldNotBeAnEmptyHistory() {
         historyManager.add(new Task("Переезд", "в 2 часа", Status.NEW));
-        final List<Task> history = historyManager.getHistory();
+        final List<AbstractTask> history = historyManager.getHistory();
         assertNotNull(history, "История не пустая.");
         assertEquals(1, history.size(), "История не пустая.");
     }
