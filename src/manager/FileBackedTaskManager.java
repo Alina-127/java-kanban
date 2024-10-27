@@ -148,9 +148,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     String description = contents[3];
                     Status status = getStatus(contents[4]);
                     int idOfEpic = 0;
-                    if (taskType.equals("SUBTASK") && contents.length<6) {
+                    if (taskType.equals("SUBTASK") && contents.length < 6) {
                         idOfEpic = Integer.parseInt(contents[5]);
-                    } else if (taskType.equals("SUBTASK") && contents.length>6) {
+                    } else if (taskType.equals("SUBTASK") && contents.length > 6) {
                         idOfEpic = Integer.parseInt(contents[7]);
                     }
                     if (taskType.equals("TASK")) {
@@ -166,7 +166,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         taskManager.epics.get(idOfEpic).addSubtasks(subtask);
                         taskManager.updateEpicStatus(taskManager.epics.get(idOfEpic));
                     } else if (taskType.equals("EPIC")) {
-                        if (contents.length<6) {
+                        if (contents.length < 6) {
                             Epic epic = new Epic(id, name, description);
                             taskManager.epics.put(id, epic);
                         } else {
