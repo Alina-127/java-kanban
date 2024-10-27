@@ -4,6 +4,8 @@ import tasks.AbstractTask;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
@@ -14,6 +16,8 @@ public interface TaskManager {
     List<Subtask> getSubtasks();
 
     List<Subtask> getEpicSubtasks(Epic epic);
+
+    ArrayList<AbstractTask> getPrioritizedTasks();
 
     void deleteTasks();
 
