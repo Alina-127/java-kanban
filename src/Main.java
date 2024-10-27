@@ -4,7 +4,6 @@ import status.Status;
 import tasks.*;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 public class Main {
@@ -23,9 +22,6 @@ public class Main {
 
             System.out.println(taskManager.getPrioritizedTasks());
 
-//            Task task2 = new Task("Покупки", "Открылся новый магазин", Status.NEW);
-//            taskManager.addNewTask(task2);
-//
             Epic epic = new Epic("Приготовить ужин", "Купить продукты");
             taskManager.addNewEpic(epic);
 
@@ -39,18 +35,11 @@ public class Main {
                     Duration.ofMinutes(15),
                     LocalDateTime.of(2000,12,10,17,40), epic.getId());
             taskManager.addNewSubtask(subtask2);
-            Subtask subtask3 = new Subtask("Купить мясо", "Филе куриное", Status.NEW,
-                    Duration.ofMinutes(15),
-                    LocalDateTime.of(2000,12,10,18,50), epic.getId());
-            taskManager.addNewSubtask(subtask3);
-            Epic epic2 = new Epic(epic.getId(), "Приготовить j,tl", "Купить продукты");
-            taskManager.updateEpic(epic2);
-            System.out.println(epic2);
 
-//            FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(Managers.file);
-//
-//            System.out.println("Tasks: " + loadedManager.getTasks());
-//            System.out.println("Epics: " + loadedManager.getEpics());
-//            System.out.println("Subtasks: " + loadedManager.getSubtasks());
+            FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(Managers.file);
+
+            System.out.println("Tasks: " + loadedManager.getTasks());
+            System.out.println("Epics: " + loadedManager.getEpics());
+            System.out.println("Subtasks: " + loadedManager.getSubtasks());
     }
 }
