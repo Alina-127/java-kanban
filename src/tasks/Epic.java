@@ -76,7 +76,7 @@ public class Epic extends AbstractTask {
     }
 
     private String getStartTimeToStr() {
-        if (getStartTime()==null) {
+        if (getStartTime() == null) {
             return "";
         }
         return getStartTime().format(formatter);
