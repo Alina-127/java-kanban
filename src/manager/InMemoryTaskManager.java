@@ -295,11 +295,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private void validationTask(AbstractTask task) {
-        List<AbstractTask> newPrioritized= List.copyOf(prioritizedTasks);
+        List<AbstractTask> newPrioritized = List.copyOf(prioritizedTasks);
         for (AbstractTask prioritizedTask1: newPrioritized) {
             if (!task.getStartTime().isBefore(prioritizedTask1.getStartTime()) &&
                     !task.getStartTime().isAfter(prioritizedTask1.getEndTime())) {
-                throw new RuntimeException("У следующих задач пересекаются даты: " + "\n"+ task + "\n" +
+                throw new RuntimeException("У следующих задач пересекаются даты: " + "\n" + task + "\n" +
                         prioritizedTask1);
             }
         }
