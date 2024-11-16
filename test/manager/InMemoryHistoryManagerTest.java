@@ -6,6 +6,8 @@ import status.Status;
 import tasks.AbstractTask;
 import tasks.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryHistoryManagerTest {
     HistoryManager historyManager;
-    Task task1 = new Task(1, "Переезд", "в 2 часа", Status.NEW);
-    Task task2 = new Task(2, "Концерт", "в 2 часа", Status.NEW);
-    Task task3 = new Task(3, "Концерт", "в 4 часа", Status.NEW);
+    Task task1 = new Task(1, "Переезд", "в 2 часа", Status.NEW, Duration.ofMinutes(32),
+            LocalDateTime.of(2000,2,10,12,50));
+    Task task2 = new Task(2, "Концерт", "в 2 часа", Status.NEW, Duration.ofMinutes(15),
+            LocalDateTime.of(2005,1,1,15,0));
+    Task task3 = new Task(3, "Концерт", "в 4 часа", Status.NEW, Duration.ofMinutes(15),
+            LocalDateTime.of(2003,10,3,17,20));
 
     @BeforeEach
     public void beforeEach() {
@@ -24,7 +29,8 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     public void addHistory_shouldNotBeAnEmptyHistory() {
-        historyManager.add(new Task("Переезд", "в 2 часа", Status.NEW));
+        historyManager.add(new Task("Переезд", "в 2 часа", Status.NEW,  Duration.ofMinutes(32),
+                LocalDateTime.of(2000,2,10,12,50)));
         final List<AbstractTask> history = historyManager.getHistory();
         assertNotNull(history, "История не пустая.");
         assertEquals(1, history.size(), "История не пустая.");

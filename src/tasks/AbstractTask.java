@@ -3,6 +3,10 @@ package tasks;
 import status.Status;
 import status.TypesOfTasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 public abstract class AbstractTask {
     protected String name;
@@ -10,20 +14,35 @@ public abstract class AbstractTask {
     protected int id;
     protected Status status;
     protected TypesOfTasks type;
+    protected Duration duration;
+    protected LocalDateTime startTime;
+    protected static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
-
-    public AbstractTask(String name, String description, Status status) {
+    public AbstractTask(String name, String description, Status status, Duration duration, LocalDateTime startTime) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
-    // для тестирования
-    public AbstractTask(int id, String name, String description, Status status) {
+
+    public AbstractTask(int id, String name, String description, Status status, Duration duration, LocalDateTime startTime) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    // для наследования в эпик
+    public AbstractTask(int id, String name, String description, Duration duration, LocalDateTime startTime) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.duration = duration;
+        this.startTime = startTime;
     }
 
     // для наследования в эпик
@@ -31,6 +50,7 @@ public abstract class AbstractTask {
         this.id = id;
         this.name = name;
         this.description = description;
+
     }
 
     // для наследования в эпик
@@ -44,16 +64,8 @@ public abstract class AbstractTask {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public int getId() {
@@ -72,8 +84,29 @@ public abstract class AbstractTask {
         this.status = status;
     }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        return getStartTime().plusMinutes(duration.toMinutes());
+    }
 
     public abstract TypesOfTasks getType();
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -84,6 +117,8 @@ public abstract class AbstractTask {
 //        && Objects.equals(name, task.name) && Objects.equals(description, task.description) &&
 //                Objects.equals(status, task.status);
     }
+
+
 
     @Override
     public int hashCode() {
@@ -97,3 +132,4 @@ public abstract class AbstractTask {
         return hash;
     }
 }
+

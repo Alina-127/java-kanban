@@ -1,11 +1,9 @@
 package manager;
 
-import tasks.AbstractTask;
-import tasks.Epic;
+import tasks.*;
 import status.Status;
-import tasks.Subtask;
-import tasks.Task;
 
+import java.time.Duration;
 import java.util.*;
 
 
@@ -14,6 +12,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Epic> epics = new HashMap<>();
     protected final Map<Integer, Subtask> subtasks = new HashMap<>();
     private HistoryManager historyManager = Managers.getDefaultHistory();
+    private final Set<AbstractTask> prioritizedTasks = new TreeSet<>(new TaskComparator());
     static int id = 1;
 
     public InMemoryTaskManager() {
@@ -37,6 +36,12 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public ArrayList<Subtask> getEpicSubtasks(Epic epic) {
         return epic.getSubtasks();
+    }
+
+    @Override
+
+    public ArrayList<AbstractTask> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks.stream().toList());
     }
 
     @Override
@@ -97,6 +102,7 @@ public class InMemoryTaskManager implements TaskManager {
         int newId = getNewId();
         newTask.setId(newId);
         tasks.put(newTask.getId(), newTask);
+        addPrioritizedTasks(newTask);
         return newTask;
     }
 
@@ -108,6 +114,7 @@ public class InMemoryTaskManager implements TaskManager {
         newEpic.setId(newId);
         epics.put(newEpic.getId(), newEpic);
         updateEpicStatus(newEpic);
+        updateEpicTime(newEpic);
         return newEpic;
     }
 
@@ -118,6 +125,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic newEpic = epics.get(newSubtask.getSubId());
         newEpic.addSubtasks(newSubtask);
         subtasks.put(newSubtask.getId(), newSubtask);
+        addPrioritizedTasks(newSubtask);
         transferSubIntoEpic(newSubtask);
         return newSubtask;
     }
@@ -127,6 +135,8 @@ public class InMemoryTaskManager implements TaskManager {
         Integer taskId = updatedTask.getId();
         if (tasks.containsKey(taskId)) {
             deleteTaskById(taskId);
+            prioritizedTasks.remove(tasks.get(taskId));
+            addPrioritizedTasks(updatedTask);
             tasks.put(taskId, updatedTask);
             return updatedTask;
         } else {
@@ -146,6 +156,7 @@ public class InMemoryTaskManager implements TaskManager {
             epics.put(epicId, updateEpic);
             updateEpic.setSubtasks(updateSub);
             updateEpicStatus(updateEpic);
+            updateEpicTime(updateEpic);
             return updateEpic;
         } else {
             System.out.println("Эпик с таким id не найден");
@@ -163,6 +174,8 @@ public class InMemoryTaskManager implements TaskManager {
             Epic epic = epics.get(epicId);
             ArrayList<Subtask> newSubtaskList = epic.getSubtasks();
             newSubtaskList.remove(oldSubtask);
+            prioritizedTasks.remove(oldSubtask);
+            addPrioritizedTasks(updateSubtask);
             newSubtaskList.add(updateSubtask);
             epic.setSubtasks(newSubtaskList);
             subtasks.put(subtaskId, updateSubtask);
@@ -178,6 +191,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task deleteTaskById(Integer id) {
         Task task = tasks.get(id);
         tasks.remove(id);
+        prioritizedTasks.remove(task);
         historyManager.remove(id);
         return task;// возвращаем значение, чтобы спросить у пользователя действительно ли он хочет это удалить.
     }
@@ -199,6 +213,7 @@ public class InMemoryTaskManager implements TaskManager {
         Subtask subtask = subtasks.get(id);
         Epic epic = epics.get(subtask.getSubId());
         subtasks.remove(id);
+        prioritizedTasks.remove(subtask);
         historyManager.remove(id);
         epic.removeSubtasks(subtask);
         updateEpicStatus(epic);
@@ -214,6 +229,7 @@ public class InMemoryTaskManager implements TaskManager {
     private void transferSubIntoEpic(Subtask newSubtask) {
         Epic epic = epics.get(newSubtask.getSubId());
         updateEpicStatus(epic);
+        updateEpicTime(epic);
     }
 
     // проверка и изменение сатуса эпик
@@ -242,6 +258,28 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    protected void updateEpicTime(Epic epic) {
+        long sumDuration = 0;
+        ArrayList<Subtask> newSubList = epic.getSubtasks();
+
+        if (!newSubList.isEmpty()) {
+            for (Subtask subtask : newSubList) {
+                sumDuration = sumDuration + subtask.getDuration().toMinutesPart();
+                if (epic.getStartTime() == null) {
+                    epic.setStartTime(subtask.getStartTime());
+                } else if (epic.getStartTime().isAfter(subtask.getStartTime())) {
+                    epic.setStartTime(subtask.getStartTime());
+                }
+                if (epic.getEndTimeEpic() == null) {
+                    epic.setEndTimeEpic(subtask.getEndTime());
+                } else if (epic.getEndTimeEpic().isBefore(subtask.getEndTime())) {
+                    epic.setEndTimeEpic(subtask.getEndTime());
+                }
+            }
+        }
+        epic.setDuration(Duration.ofMinutes(sumDuration));
+    }
+
     public static Status getStatus(String str) {
         return switch (str) {
             case "NEW" -> Status.NEW;
@@ -249,6 +287,22 @@ public class InMemoryTaskManager implements TaskManager {
             case "DONE" -> Status.DONE;
             default -> null;
         };
+    }
+
+    private void addPrioritizedTasks(AbstractTask task) {
+        validationTask(task);
+        prioritizedTasks.add(task);
+    }
+
+    private void validationTask(AbstractTask task) {
+        List<AbstractTask> newPrioritized = List.copyOf(prioritizedTasks);
+        for (AbstractTask prioritizedTask1: newPrioritized) {
+            if (!task.getStartTime().isBefore(prioritizedTask1.getStartTime()) &&
+                    !task.getStartTime().isAfter(prioritizedTask1.getEndTime())) {
+                throw new RuntimeException("У следующих задач пересекаются даты: " + "\n" + task + "\n" +
+                        prioritizedTask1);
+            }
+        }
     }
 
     @Override
