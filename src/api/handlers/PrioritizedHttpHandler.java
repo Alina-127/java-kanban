@@ -42,7 +42,6 @@ public class PrioritizedHttpHandler implements HttpHandler {
         }
     }
 
-
     protected Endpoint getEndpoint(String requestPath, String requestMethod) {
         String[] pathParts = requestPath.split("/");
 

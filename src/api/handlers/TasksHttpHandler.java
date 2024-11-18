@@ -17,7 +17,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class TasksHttpHandler implements HttpHandler {
-
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     protected InMemoryTaskManager taskManager;
     protected Gson gson = new GsonBuilder()
@@ -27,9 +26,11 @@ public class TasksHttpHandler implements HttpHandler {
             .create();
 
     private BaseHttpHandler baseSend = new BaseHttpHandler();
+
     public TasksHttpHandler(InMemoryTaskManager taskManager) {
         this.taskManager = taskManager;
     }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         System.out.println("Началась обработка /tasks запроса от клиента.");
@@ -72,9 +73,6 @@ public class TasksHttpHandler implements HttpHandler {
                 baseSend.sendText(exchange, "Такого метода не существует", 505);
         }
     }
-
-
-
 
     protected Endpoint getEndpoint(String requestPath, String requestMethod) {
         String[] pathParts = requestPath.split("/");

@@ -5,7 +5,6 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import java.time.Duration;
-
 import java.io.IOException;
 
 public class DurationAdapter extends TypeAdapter<Duration> {

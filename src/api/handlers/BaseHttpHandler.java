@@ -1,13 +1,11 @@
 package api.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
-import manager.InMemoryTaskManager;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-
 
 public class BaseHttpHandler {
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;

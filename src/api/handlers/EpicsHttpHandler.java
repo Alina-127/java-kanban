@@ -28,9 +28,11 @@ public class EpicsHttpHandler implements HttpHandler {
             .create();
 
     private BaseHttpHandler baseSend = new BaseHttpHandler();
+
     public EpicsHttpHandler(InMemoryTaskManager taskManager) {
         this.taskManager = taskManager;;
     }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         System.out.println("Началась обработка /epics запроса от клиента.");
@@ -81,9 +83,6 @@ public class EpicsHttpHandler implements HttpHandler {
                 baseSend.sendText(exchange, "Такого метода не существует", 505);
         }
     }
-
-
-
 
     protected Endpoint getEndpoint(String requestPath, String requestMethod) {
         String[] pathParts = requestPath.split("/");
