@@ -34,6 +34,9 @@ public class Epic extends AbstractTask {
     }
 
     public ArrayList<Subtask> getSubtasks() {
+        if (subtasks == null) {
+            return new ArrayList<>(); // Возвращаем пустой список, если подзадачи не инициализированы
+        }
         return subtasks;
     }
 
@@ -50,7 +53,9 @@ public class Epic extends AbstractTask {
     }
 
     public void clearSubtasks() {
-        subtasks.clear();
+        if (subtasks != null) {
+            subtasks.clear();
+        }
     }
 
     @Override
@@ -77,7 +82,7 @@ public class Epic extends AbstractTask {
 
     private String getStartTimeToStr() {
         if (getStartTime() == null) {
-            return "";
+            return "0";
         }
         return getStartTime().format(formatter);
     }
@@ -92,7 +97,7 @@ public class Epic extends AbstractTask {
                 ", status=" + status +
                 ", duration=" + getDurationToStr() +
                 ", startTime=" + getStartTimeToStr() +
-                ", subtasksList=" + subtasks +
+                ", subtasksList=" + getSubtasks() +
                 '}';
     }
 
